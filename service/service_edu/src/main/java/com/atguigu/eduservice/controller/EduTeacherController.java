@@ -77,7 +77,7 @@ public class EduTeacherController {
         return R.ok().data("total", total).data("row", records);
     }
 
-    //带条件的分页查询功能
+    //5.带条件的分页查询功能
     @ApiOperation(value = "分页讲师列表")
     @PostMapping("pageQueryTeacher/{current}/{limit}")
     public R pageQueryListTeacher(
@@ -96,6 +96,36 @@ public class EduTeacherController {
         List<EduTeacher> records = page.getRecords(); //数据list集合
         return R.ok().data("total", total).data("row", records);
 
+    }
+
+    //6.增加操作
+    @ApiOperation(value = "新增讲师")
+    @PostMapping
+    public R addTeacher(
+            @ApiParam(name = "teacher", value = "讲师对象", required = true)
+            @RequestBody EduTeacher eduTeacher ) {
+        eduTeacherService.save(eduTeacher);
+        return R.ok();
+    }
+
+    //7.根据id查询数据
+    @ApiOperation(value = "查询讲师数据")
+    @GetMapping("getTeacher/{id}")
+    public R getTeacher(@PathVariable String id) {
+        EduTeacher byId = eduTeacherService.getById(id);
+        return R.ok().data("teacher", byId);
+    }
+
+    //8.修改数据
+    @ApiOperation(value = "修改讲师数据")
+    @PostMapping("upDateTeacher")
+    public R upDateTeacher(@PathVariable EduTeacher eduTeacher) {
+        boolean flag = eduTeacherService.updateById(eduTeacher);
+        if (flag) {
+            return R.ok();
+        } else {
+            return R.err();
+        }
     }
 }
 
