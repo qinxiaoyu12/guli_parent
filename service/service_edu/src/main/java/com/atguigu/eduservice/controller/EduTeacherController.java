@@ -5,6 +5,7 @@ import com.atguigu.commonutils.R;
 import com.atguigu.eduservice.entity.EduTeacher;
 import com.atguigu.eduservice.entity.vo.TeacherQuery;
 import com.atguigu.eduservice.service.EduTeacherService;
+import com.atguigu.servicebase.ExceptionHandler.GuliException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -48,13 +49,10 @@ public class EduTeacherController {
     //3.逻辑删除讲师表中的数据
     @ApiOperation(value = "根据ID删除讲师")
     @DeleteMapping("{id}")
-    public R removeTeacher(@ApiParam(name = "id", value = "讲师ID", required = true) @PathVariable String id) {
-        boolean flag = eduTeacherService.removeById(id);
-        if (flag) {
-            return R.ok();
-        } else {
-            return R.err();
-        }
+    public R removeTeacher(@ApiParam(name = "id", value = "讲师ID", required = true)
+                           @PathVariable String id) {
+        eduTeacherService.removeById(id);
+        return R.ok();
     }
 
     //4.分页查询功能
@@ -112,20 +110,27 @@ public class EduTeacherController {
     @ApiOperation(value = "查询讲师数据")
     @GetMapping("getTeacher/{id}")
     public R getTeacher(@PathVariable String id) {
+//        try {
+//            int a = 10/0;
+//        } catch (Exception e) {
+//            throw new GuliException(20001, "出现自定义异常");
+//        }
         EduTeacher byId = eduTeacherService.getById(id);
         return R.ok().data("teacher", byId);
     }
 
     //8.修改数据
-    @ApiOperation(value = "修改讲师数据")
-    @PostMapping("upDateTeacher")
-    public R upDateTeacher(@PathVariable EduTeacher eduTeacher) {
-        boolean flag = eduTeacherService.updateById(eduTeacher);
-        if (flag) {
-            return R.ok();
-        } else {
-            return R.err();
-        }
+    @ApiOperation(value = "根据id修改讲师数据")
+    @PostMapping("{id}")
+    public R updateById(
+            @ApiParam(name = "id", value = "讲师id", required = true)
+            @PathVariable String id,
+
+            @ApiParam(name = "teacher", value = "讲师对象", required = true)
+            @RequestBody EduTeacher eduTeacher) {
+        eduTeacher.setId(id);
+        eduTeacherService.updateById(eduTeacher);
+        return R.ok();
     }
 }
 

@@ -42,7 +42,7 @@ public class R {
     }
 
     //失败的方法
-    public static R err() {
+    public static R error() {
         R r = new R();
         r.setSuccess(false);
         r.setCode(ResultCode.ERROR);
