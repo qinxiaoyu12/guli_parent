@@ -88,6 +88,8 @@ public class EduTeacherController {
 
         //调用方法实现分页
         //调用方法时候, 底层封装, 把分页数据封装到page对象里面
+        //排序
+
         eduTeacherService.pageQuery(page, teacherQuery);
 
         long total = page.getTotal(); //总记录数
@@ -98,7 +100,7 @@ public class EduTeacherController {
 
     //6.增加操作
     @ApiOperation(value = "新增讲师")
-    @PostMapping
+    @PostMapping("addTeacher")
     public R addTeacher(
             @ApiParam(name = "teacher", value = "讲师对象", required = true)
             @RequestBody EduTeacher eduTeacher ) {
@@ -121,16 +123,14 @@ public class EduTeacherController {
 
     //8.修改数据
     @ApiOperation(value = "根据id修改讲师数据")
-    @PostMapping("{id}")
-    public R updateById(
-            @ApiParam(name = "id", value = "讲师id", required = true)
-            @PathVariable String id,
-
-            @ApiParam(name = "teacher", value = "讲师对象", required = true)
-            @RequestBody EduTeacher eduTeacher) {
-        eduTeacher.setId(id);
-        eduTeacherService.updateById(eduTeacher);
-        return R.ok();
+    @PostMapping("updateTeacher")
+    public R updateById(@RequestBody EduTeacher eduTeacher) {
+        boolean flag = eduTeacherService.updateById(eduTeacher);
+        if (flag) {
+            return R.ok();
+        } else {
+            return R.error();
+        }
     }
 }
 

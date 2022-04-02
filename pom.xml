@@ -5,6 +5,7 @@
     <modules>
         <module>service</module>
         <module>Common</module>
+        <module>service_oss</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
